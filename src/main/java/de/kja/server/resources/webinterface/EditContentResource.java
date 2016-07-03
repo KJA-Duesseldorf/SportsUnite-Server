@@ -1,5 +1,6 @@
 package de.kja.server.resources.webinterface;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -24,6 +25,7 @@ public class EditContentResource {
 	}
 	
 	@GET
+	@PermitAll
 	public Response get(@QueryParam("id") String idString) {
 		Content content = null;
 		if(idString == null) {
@@ -45,6 +47,7 @@ public class EditContentResource {
 	}
 	
 	@POST
+	@PermitAll
 	public Response post(@FormParam("id") String idString, @FormParam("title") String title,
 			@FormParam("shortText") String shortText, @FormParam("text") String text, @FormParam("button") String button) {
 		Content content = null;

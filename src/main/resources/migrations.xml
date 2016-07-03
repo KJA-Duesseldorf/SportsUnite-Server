@@ -23,4 +23,15 @@
         </createTable>
     </changeSet>
     
+    <changeSet id="2" author="turakar">
+        <createTable tableName="admins">
+            <column name="name" type="text">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="password" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    
 </databaseChangeLog>

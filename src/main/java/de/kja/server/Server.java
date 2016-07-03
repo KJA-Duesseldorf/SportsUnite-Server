@@ -1,12 +1,20 @@
 package de.kja.server;
 
+import javax.ws.rs.core.Response;
+
 import org.skife.jdbi.v2.DBI;
 
+import de.kja.server.auth.Admin;
+import de.kja.server.auth.DatabaseAuthenticator;
+import de.kja.server.dbi.AdminDao;
 import de.kja.server.dbi.ContentDao;
 import de.kja.server.resources.service.ContentResource;
 import de.kja.server.resources.webinterface.EditContentResource;
 import de.kja.server.resources.webinterface.IndexResource;
 import io.dropwizard.Application;
+import io.dropwizard.auth.AuthDynamicFeature;
+import io.dropwizard.auth.UnauthorizedHandler;
+import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
 import io.dropwizard.db.PooledDataSourceFactory;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.migrations.MigrationsBundle;
@@ -36,6 +44,12 @@ public class Server extends Application<ServerConfig> {
 		final DBIFactory factory = new DBIFactory();
 		final DBI dbi = factory.build(environment, configuration.getDatabase(), "postgresql");
 		final ContentDao contentDao = dbi.onDemand(ContentDao.class);
+		
+		environment.jersey().register(new AuthDynamicFeature(
+				new BasicCredentialAuthFilter.Builder<Admin>()
+				.setAuthenticator(new DatabaseAuthenticator(dbi.onDemand(AdminDao.class)))
+				.setRealm("Adminbereich")
+				.buildAuthFilter()));
 		
 		final ContentResource contentResource = new ContentResource(contentDao);
 		environment.jersey().register(contentResource);
