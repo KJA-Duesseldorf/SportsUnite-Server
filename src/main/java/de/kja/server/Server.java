@@ -4,6 +4,7 @@ import org.skife.jdbi.v2.DBI;
 
 import de.kja.server.dbi.ContentDao;
 import de.kja.server.resources.service.ContentResource;
+import de.kja.server.resources.webinterface.EditContentResource;
 import de.kja.server.resources.webinterface.IndexResource;
 import io.dropwizard.Application;
 import io.dropwizard.db.PooledDataSourceFactory;
@@ -41,6 +42,8 @@ public class Server extends Application<ServerConfig> {
 		
 		final IndexResource indexResource = new IndexResource(contentDao);
 		environment.jersey().register(indexResource);
+		final EditContentResource editContentResource = new EditContentResource(contentDao);
+		environment.jersey().register(editContentResource);
 	}
 
 }
