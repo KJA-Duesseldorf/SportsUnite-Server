@@ -8,6 +8,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 
 import de.kja.server.dbi.ContentDao;
 import de.kja.server.models.Content;
@@ -29,16 +31,12 @@ public class IndexResource {
 	}
 	
 	@POST
-	public IndexView delete(@FormParam("id") long id) {
-		String message = null;
+	public Response delete(@FormParam("id") long id) {
 		int affected = contentDao.delete(id);
 		if(affected == 0) {
-			message = "Inhalt, der gelöscht werden sollte, existierte nicht!";
-		} else {
-			message = "Inhalt gelöscht.";
+			return Response.status(400).build();
 		}
-		List<Content> contents = contentDao.getAllContents();
-		return new IndexView(contents, message);
+		return Response.seeOther(UriBuilder.fromUri("/webinterface").build()).build();
 	}
 	
 }
