@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<#-- @ftlvariable name="" type="de.kja.server.views.IndexView -->
+<#-- @ftlvariable name="" type="de.kja.server.resources.webinterface.IndexView -->
 
 <html>
 <head>
