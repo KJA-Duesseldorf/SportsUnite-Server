@@ -26,7 +26,7 @@ public interface ContentDao {
 	public List<Content> getAllContents();
 	
 	@SqlUpdate("delete from " + TABLE_CONTENTS + " where id = :id")
-	public int delete(@Bind long id);
+	public int delete(@Bind("id") long id);
 	
 	class Mapper implements ResultSetMapper<Content> {
 		
