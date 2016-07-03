@@ -1,7 +1,5 @@
 package de.kja.server;
 
-import javax.ws.rs.core.Response;
-
 import org.skife.jdbi.v2.DBI;
 
 import de.kja.server.auth.Admin;
@@ -13,7 +11,6 @@ import de.kja.server.resources.webinterface.EditContentResource;
 import de.kja.server.resources.webinterface.IndexResource;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
-import io.dropwizard.auth.UnauthorizedHandler;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
 import io.dropwizard.db.PooledDataSourceFactory;
 import io.dropwizard.jdbi.DBIFactory;
