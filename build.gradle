@@ -22,6 +22,6 @@ jar {
         attributes 'Implementation-Title': 'Hello-World',
                 'Built-Date': new Date(),
                 'Built-JDK': System.getProperty('java.version'),
-                'Main-Class': 'de.thoffbauer.helloworld.server.HelloWorldApplication'
+                'Main-Class': 'de.kja.server.Server'
     }
 }
