@@ -19,14 +19,20 @@ public interface ContentDao {
 
 	public static final String TABLE_CONTENTS = "contents";
 	
-	@SqlUpdate("insert into " + TABLE_CONTENTS + " (title, shorttext, text) values (:title, :shortText, :text)")
-	public void insert(@BindBean Content content);
+	@SqlQuery("insert into " + TABLE_CONTENTS + " (title, shorttext, text) values (:title, :shortText, :text) returning id")
+	public int insert(@BindBean Content content);
 	
 	@SqlQuery("select * from " + TABLE_CONTENTS)
 	public List<Content> getAllContents();
 	
+	@SqlQuery("select * from " + TABLE_CONTENTS + " where id = :id")
+	public Content getContent(@Bind("id") long id);
+	
 	@SqlUpdate("delete from " + TABLE_CONTENTS + " where id = :id")
-	public int delete(@Bind long id);
+	public int delete(@Bind("id") long id);
+	
+	@SqlUpdate("update " + TABLE_CONTENTS + " SET title=:title, shortText=:shortText, text=:text WHERE id = :id")
+	public int update(@BindBean Content content);
 	
 	class Mapper implements ResultSetMapper<Content> {
 		

@@ -8,6 +8,8 @@ dependencies {
     compile group: 'io.dropwizard', name: 'dropwizard-core', version: '0.9.2'
     compile group: 'io.dropwizard', name: 'dropwizard-jdbi', version: '0.9.2'
     compile group: 'io.dropwizard', name: 'dropwizard-migrations', version: '0.9.2'
+    compile group: 'io.dropwizard', name: 'dropwizard-views-freemarker', version: '0.9.2'
+    compile group: 'io.dropwizard', name: 'dropwizard-auth', version: '0.9.2'
     compile group: 'postgresql', name: 'postgresql', version: '9.1-901-1.jdbc4'
 }
 

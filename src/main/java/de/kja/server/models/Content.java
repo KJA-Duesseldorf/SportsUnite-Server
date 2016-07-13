@@ -1,6 +1,6 @@
 package de.kja.server.models;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -8,13 +8,13 @@ public class Content {
 	
 	private long id;
 	
-	@NotBlank
+	@NotNull
 	private String title;
 	
-	@NotBlank
+	@NotNull
 	private String shortText;
 	
-	@NotBlank
+	@NotNull
 	private String text;
 	
 	public Content() {
@@ -22,7 +22,7 @@ public class Content {
 	}
 
 	public Content(String title, String shortText, String text) {
-		this.id = 0;
+		this.id = -1;
 		this.title = title;
 		this.shortText = shortText;
 		this.text = text;

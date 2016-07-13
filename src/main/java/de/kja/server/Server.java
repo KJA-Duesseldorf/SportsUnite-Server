@@ -2,14 +2,22 @@ package de.kja.server;
 
 import org.skife.jdbi.v2.DBI;
 
+import de.kja.server.auth.Admin;
+import de.kja.server.auth.DatabaseAuthenticator;
+import de.kja.server.dbi.AdminDao;
 import de.kja.server.dbi.ContentDao;
 import de.kja.server.resources.service.ContentResource;
+import de.kja.server.resources.webinterface.EditContentResource;
+import de.kja.server.resources.webinterface.IndexResource;
 import io.dropwizard.Application;
+import io.dropwizard.auth.AuthDynamicFeature;
+import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
 import io.dropwizard.db.PooledDataSourceFactory;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.dropwizard.views.ViewBundle;
 
 public class Server extends Application<ServerConfig> {
 	
@@ -25,6 +33,7 @@ public class Server extends Application<ServerConfig> {
 				return configuration.getDatabase();
 			}
 		});
+		bootstrap.addBundle(new ViewBundle<ServerConfig>());
 	}
 
 	@Override
@@ -33,8 +42,19 @@ public class Server extends Application<ServerConfig> {
 		final DBI dbi = factory.build(environment, configuration.getDatabase(), "postgresql");
 		final ContentDao contentDao = dbi.onDemand(ContentDao.class);
 		
+		environment.jersey().register(new AuthDynamicFeature(
+				new BasicCredentialAuthFilter.Builder<Admin>()
+				.setAuthenticator(new DatabaseAuthenticator(dbi.onDemand(AdminDao.class)))
+				.setRealm("Adminbereich")
+				.buildAuthFilter()));
+		
 		final ContentResource contentResource = new ContentResource(contentDao);
 		environment.jersey().register(contentResource);
+		
+		final IndexResource indexResource = new IndexResource(contentDao);
+		environment.jersey().register(indexResource);
+		final EditContentResource editContentResource = new EditContentResource(contentDao);
+		environment.jersey().register(editContentResource);
 	}
 
 }
