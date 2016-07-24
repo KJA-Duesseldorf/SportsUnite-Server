@@ -10,7 +10,7 @@ import javax.ws.rs.core.MediaType;
 import de.kja.server.dbi.ContentDao;
 import de.kja.server.models.Content;
 
-@Path("/service/content")
+@Path("/service/v1/content")
 @Produces(MediaType.APPLICATION_JSON)
 public class ContentResource {
 	
