@@ -8,6 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import de.kja.server.dbi.DistrictDao;
+import de.kja.server.models.District;
 
 @Path("/service/v1/district")
 @Produces(MediaType.APPLICATION_JSON)
@@ -21,8 +22,8 @@ public class DistrictResource {
 	}
 	
 	@GET
-	public List<String> getAllDistrictNames() {
-		return districtDao.getAllDistrictNames();
+	public List<District> getAllDistricts() {
+		return districtDao.getAllDistricts();
 	}
 
 }

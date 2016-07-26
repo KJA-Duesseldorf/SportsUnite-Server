@@ -120,4 +120,52 @@
         </rollback>
     </changeSet>
     
+    <changeSet id="6" author="turakar">
+        <addColumn tableName="districts">
+            <column name="subdistricts" type="text" defaultValue="">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <update tableName="districts">
+            <column name="subdistricts" value="Altstadt,Carlstadt,Stadtmitte,Pempelfort,Derendorf,Golzheim"/>
+            <where>name = 'Stadtbezirk 1'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Flingern Süd,Flingern Nord, Düsseltal"/>
+            <where>name = 'Stadtbezirk 2'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Friedrichstadt,Unterbilk,Hafen,Hamm,Volmerswerth,Bilk,Oberbilk,Flehe"/>
+            <where>name = 'Stadtbezirk 3'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Oberkassel,Heerdt,Lörick,Niederkassel"/>
+            <where>name = 'Stadtbezirk 4'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Stockum,Lohausen,Kaiserswerth,Wittlaer,Angermund,Kalkum"/>
+            <where>name = 'Stadtbezirk 5'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Lichtenbroich,Unterrath,Rath,Mörsenbroich"/>
+            <where>name = 'Stadtbezirk 6'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Gerresheim,Grafenberg,Ludenberg,Hubbelrath,Knittkuhl"/>
+            <where>name = 'Stadtbezirk 7'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Lierenfeld,Eller,Vennhausen,Unterbach"/>
+            <where>name = 'Stadtbezirk 8'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Wersten,Himmelgeist,Holthausen,Reisholz,Benrath,Urdenbach,Itter,Hassels"/>
+            <where>name = 'Stadtbezirk 9'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Garath,Hellerhof"/>
+            <where>name = 'Stadtbezirk 10'</where>
+        </update>
+    </changeSet>
+    
 </databaseChangeLog>
