@@ -31,7 +31,7 @@ public class EditContentResource {
 		if(idString == null) {
 			return Response.status(400).build();
 		} else if(idString.equals("new")) {
-			content = new Content("", "", "");
+			content = new Content("", "", "", "");
 		} else {
 			try {
 				long id = Long.valueOf(idString);
@@ -49,18 +49,19 @@ public class EditContentResource {
 	@POST
 	@PermitAll
 	public Response post(@FormParam("id") String idString, @FormParam("title") String title,
-			@FormParam("shortText") String shortText, @FormParam("text") String text, @FormParam("button") String button) {
+			@FormParam("shortText") String shortText, @FormParam("text") String text, @FormParam("district") String district, 
+			@FormParam("button") String button) {
 		Content content = null;
 		if(idString == null) {
 			return Response.status(400).build();
 		} else if(idString.equals("new")) {
-			content = new Content(title, shortText, text);
+			content = new Content(title, shortText, text, district);
 			int id = contentDao.insert(content);
 			content.setId(id);
 		} else {
 			try {
 				long id = Long.valueOf(idString);
-				content = new Content(id, title, shortText, text);
+				content = new Content(id, title, shortText, text, district);
 				int affected = contentDao.update(content);
 				if(affected == 0) {
 					return Response.status(404).build();

@@ -17,23 +17,28 @@ public class Content {
 	@NotNull
 	private String text;
 	
+	@NotNull
+	private String district;
+	
 	public Content() {
 		
 	}
 
-	public Content(String title, String shortText, String text) {
+	public Content(String title, String shortText, String text, String district) {
 		this.id = -1;
 		this.title = title;
 		this.shortText = shortText;
 		this.text = text;
+		this.district = district;
 	}
 
-	public Content(long id, String title, String shortText, String text) {
+	public Content(long id, String title, String shortText, String text, String district) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.shortText = shortText;
 		this.text = text;
+		this.district = district;
 	}
 
 	@JsonProperty("id")
@@ -74,6 +79,16 @@ public class Content {
 	@JsonProperty("text")
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	@JsonProperty("district")
+	public String getDistrict() {
+		return district;
+	}
+
+	@JsonProperty("district")
+	public void setDistrict(String district) {
+		this.district = district;
 	}
 
 }

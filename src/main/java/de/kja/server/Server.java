@@ -6,7 +6,9 @@ import de.kja.server.auth.Admin;
 import de.kja.server.auth.DatabaseAuthenticator;
 import de.kja.server.dbi.AdminDao;
 import de.kja.server.dbi.ContentDao;
+import de.kja.server.dbi.DistrictDao;
 import de.kja.server.resources.service.ContentResource;
+import de.kja.server.resources.service.DistrictResource;
 import de.kja.server.resources.webinterface.EditContentResource;
 import de.kja.server.resources.webinterface.IndexResource;
 import io.dropwizard.Application;
@@ -40,6 +42,7 @@ public class Server extends Application<ServerConfig> {
 	public void run(ServerConfig configuration, Environment environment) throws Exception {
 		final DBIFactory factory = new DBIFactory();
 		final DBI dbi = factory.build(environment, configuration.getDatabase(), "postgresql");
+		final DistrictDao districtDao = dbi.onDemand(DistrictDao.class);
 		final ContentDao contentDao = dbi.onDemand(ContentDao.class);
 		
 		environment.jersey().register(new AuthDynamicFeature(
@@ -48,7 +51,9 @@ public class Server extends Application<ServerConfig> {
 				.setRealm("Adminbereich")
 				.buildAuthFilter()));
 		
-		final ContentResource contentResource = new ContentResource(contentDao);
+		final DistrictResource districtResource = new DistrictResource(districtDao);
+		environment.jersey().register(districtResource);
+		final ContentResource contentResource = new ContentResource(contentDao, districtDao);
 		environment.jersey().register(contentResource);
 		
 		final IndexResource indexResource = new IndexResource(contentDao);

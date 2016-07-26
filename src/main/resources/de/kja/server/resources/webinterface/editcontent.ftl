@@ -18,6 +18,8 @@
 		<input type="text" name="title" value="${content.title}"/><br/>
 		Kurzbeschreibung:<br/>
 		<input type="text" name="shortText" value="${content.shortText}"/><br/>
+		Stadtbezirk:<br/>
+		<input type="text" name="district" value="${content.district}"/><br/>
 		Text:<br/>
 		<input type="textarea" name="text" value="${content.text}"/><br/>
 		<button type="submit" name="button" value="save">Speichern</button>
