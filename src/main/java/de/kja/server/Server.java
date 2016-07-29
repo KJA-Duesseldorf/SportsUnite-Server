@@ -7,6 +7,7 @@ import de.kja.server.auth.DatabaseAuthenticator;
 import de.kja.server.dbi.AdminDao;
 import de.kja.server.dbi.ContentDao;
 import de.kja.server.dbi.DistrictDao;
+import de.kja.server.resources.images.ImagesResource;
 import de.kja.server.resources.service.ContentResource;
 import de.kja.server.resources.service.DistrictResource;
 import de.kja.server.resources.webinterface.EditContentResource;
@@ -50,6 +51,9 @@ public class Server extends Application<ServerConfig> {
 				.setAuthenticator(new DatabaseAuthenticator(dbi.onDemand(AdminDao.class)))
 				.setRealm("Adminbereich")
 				.buildAuthFilter()));
+		
+		final ImagesResource imagesResource = new ImagesResource();
+		environment.jersey().register(imagesResource);
 		
 		final DistrictResource districtResource = new DistrictResource(districtDao);
 		environment.jersey().register(districtResource);
