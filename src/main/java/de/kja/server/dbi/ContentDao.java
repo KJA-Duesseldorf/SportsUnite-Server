@@ -17,21 +17,24 @@ import de.kja.server.models.Content;
 @RegisterMapper(ContentDao.Mapper.class)
 public interface ContentDao {
 	
-	@SqlQuery("insert into contents (title, shorttext, text, districtid) "
-			+ "values (:title, :shortText, :text, (select id from districts where name = :district)) "
+	@SqlQuery("insert into contents (title, shorttext, text, districtid, image) "
+			+ "values (:title, :shortText, :text, (select id from districts where name = :district), :image) "
 			+ "returning id")
 	public int insert(@BindBean Content content);
 	
-	@SqlQuery("select contents.id, contents.title, contents.shortText, contents.text, districts.name from contents " 
+	@SqlQuery("select contents.id, contents.title, contents.shortText, contents.text, districts.name, contents.image "
+			+ "from contents " 
 			+ "inner join districts on contents.districtid = districts.id")
 	public List<Content> getAllContents();
 	
-	@SqlQuery("select contents.id, contents.title, contents.shortText, contents.text, districts.name from contents "
+	@SqlQuery("select contents.id, contents.title, contents.shortText, contents.text, districts.name, contents.image "
+			+ "from contents "
 			+ "inner join districts ON contents.districtid = districts.id "
 			+ "order by ST_Distance(districts.position, (select position from districts where name = :district)) asc;")
 	public List<Content> getAllContentsOrdered(@Bind("district") String district);
 	
-	@SqlQuery("select contents.id, contents.title, contents.shortText, contents.text, districts.name from contents " 
+	@SqlQuery("select contents.id, contents.title, contents.shortText, contents.text, districts.name, contents.image "
+			+ "from contents "
 			+ "inner join districts on contents.districtid = districts.id " 
 			+ "where contents.id = :id")
 	public Content getContent(@Bind("id") long id);
@@ -44,6 +47,14 @@ public interface ContentDao {
 			+ "where name = :district) where id = :id")
 	public int update(@BindBean Content content);
 	
+	@SqlUpdate("update contents "
+			+ "set title=:title, shortText=:shortText, text=:text, districtid=(select id from districts "
+			+ "where name = :district), image=:image where id = :id")
+	public int updateImage(@BindBean Content content);
+	
+	@SqlQuery("select contents.image from contents where id = :id")
+	public String getImage(@Bind("id") long id);
+	
 	class Mapper implements ResultSetMapper<Content> {
 		
 		public Mapper() {
@@ -53,7 +64,7 @@ public interface ContentDao {
 		@Override
 		public Content map(int index, ResultSet r, StatementContext ctx) throws SQLException {
 			return new Content(r.getLong("id"), r.getString("title"), r.getString("shorttext"),
-					r.getString("text"), r.getString("name"));
+					r.getString("text"), r.getString("name"), r.getString("image"));
 		}
 		
 	}

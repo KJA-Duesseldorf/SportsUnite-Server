@@ -8,7 +8,10 @@
 	<title>Inhalt bearbeiten</title>
 </head>
 <body>
-	<form method="POST" action="/webinterface/edit">
+	<noscript>
+		<h3>Die Sicherheitsabfrage beim Löschen von Inhalten funktioniert nicht mit deaktiviertem JavaScript!</h3>
+	</noscript>
+	<form enctype="multipart/form-data" method="POST" action="/webinterface/edit">
 		<#if content.id != -1>
 			<input type="hidden" name="id" value="${content.id}"/>
 		<#else>
@@ -20,6 +23,15 @@
 		<input type="text" name="shortText" value="${content.shortText}"/><br/>
 		Stadtbezirk:<br/>
 		<input type="text" name="district" value="${content.district}"/><br/>
+		Bild:<br/>
+		<#if content.image??>
+			<img src="/images?id=${content.image}" alt="Hochgeladenes Bild"/><br/>
+		</#if>
+		<input type="file" name="image" accept="image/png"/>
+		<#if content.image??>
+			<button type="submit" name="button" value="deleteimage" onclick="return confirm('Wollen Sie wirklich dieses Bild löschen?');">Bild Löschen</button>
+		</#if>
+		<br/>
 		Text:<br/>
 		<input type="textarea" name="text" value="${content.text}"/><br/>
 		<button type="submit" name="button" value="save">Speichern</button>

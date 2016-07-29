@@ -1,5 +1,6 @@
 package de.kja.server;
 
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.skife.jdbi.v2.DBI;
 
 import de.kja.server.auth.Admin;
@@ -41,6 +42,8 @@ public class Server extends Application<ServerConfig> {
 
 	@Override
 	public void run(ServerConfig configuration, Environment environment) throws Exception {
+		environment.jersey().register(MultiPartFeature.class);
+		
 		final DBIFactory factory = new DBIFactory();
 		final DBI dbi = factory.build(environment, configuration.getDatabase(), "postgresql");
 		final DistrictDao districtDao = dbi.onDemand(DistrictDao.class);

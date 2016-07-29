@@ -20,25 +20,29 @@ public class Content {
 	@NotNull
 	private String district;
 	
+	private String image;
+	
 	public Content() {
 		
 	}
 
-	public Content(String title, String shortText, String text, String district) {
+	public Content(String title, String shortText, String text, String district, String image) {
 		this.id = -1;
 		this.title = title;
 		this.shortText = shortText;
 		this.text = text;
 		this.district = district;
+		this.image = image;
 	}
 
-	public Content(long id, String title, String shortText, String text, String district) {
+	public Content(long id, String title, String shortText, String text, String district, String image) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.shortText = shortText;
 		this.text = text;
 		this.district = district;
+		this.image = image;
 	}
 
 	@JsonProperty("id")
@@ -89,6 +93,16 @@ public class Content {
 	@JsonProperty("district")
 	public void setDistrict(String district) {
 		this.district = district;
+	}
+
+	@JsonProperty("image")
+	public String getImage() {
+		return image;
+	}
+
+	@JsonProperty("image")
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 }

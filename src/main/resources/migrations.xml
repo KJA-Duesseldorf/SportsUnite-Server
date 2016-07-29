@@ -168,4 +168,12 @@
         </update>
     </changeSet>
     
+    <changeSet id="7" author="turakar">
+        <addColumn tableName="contents">
+            <column name="image" type="text">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    
 </databaseChangeLog>
