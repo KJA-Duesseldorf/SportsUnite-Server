@@ -51,8 +51,6 @@
     </changeSet>
     
     <changeSet id="4" author="turakar">
-        <comment>PostGIS must be installed on the system.</comment>
-        <sql>create extension postgis</sql>
         <addColumn tableName="districts">
             <column name="position" type="geography(point, 4326)">
                 <constraints nullable="false"/>
@@ -60,7 +58,6 @@
         </addColumn>
         <rollback>
             <dropColumn tableName="districts" columnName="position"/>
-            <sql>drop extension postgis</sql>
         </rollback>
     </changeSet>
     
