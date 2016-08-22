@@ -58,6 +58,10 @@
                 <constraints nullable="false"/>
             </column>
         </addColumn>
+        <rollback>
+            <dropColumn tableName="districts" columnName="position"/>
+            <sql>drop extension postgis</sql>
+        </rollback>
     </changeSet>
     
     <changeSet id="5" author="turakar">
@@ -166,6 +170,9 @@
             <column name="subdistricts" value="Garath,Hellerhof"/>
             <where>name = 'Stadtbezirk 10'</where>
         </update>
+        <rollback>
+            <dropColumn tableName="districts" columnName="subdistricts"/>
+        </rollback>
     </changeSet>
     
     <changeSet id="7" author="turakar">
@@ -174,6 +181,9 @@
                 <constraints nullable="true"/>
             </column>
         </addColumn>
+        <rollback>
+            <dropColumn tableName="contents" columnName="image"/>
+        </rollback>
     </changeSet>
     
 </databaseChangeLog>
