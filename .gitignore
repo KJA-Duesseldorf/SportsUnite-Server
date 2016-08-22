@@ -12,4 +12,4 @@ build/
 hs_err_pid*
 
 # Images (uploaded at runtime)
-images
+/images/
