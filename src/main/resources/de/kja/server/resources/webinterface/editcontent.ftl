@@ -33,7 +33,7 @@
 		</#if>
 		<br/>
 		Text:<br/>
-		<input type="textarea" name="text" value="${content.text}"/><br/>
+		<textarea cols="30" wrap="hard" rows="30" name="text">${content.text}</textarea><br/>
 		<button type="submit" name="button" value="save">Speichern</button>
 		<button type="submit" name="button" value="saveexit">Speichern und Schließen</button>
 	</form>
