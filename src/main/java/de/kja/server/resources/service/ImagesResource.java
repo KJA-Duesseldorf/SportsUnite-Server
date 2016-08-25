@@ -1,4 +1,4 @@
-package de.kja.server.resources.images;
+package de.kja.server.resources.service;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import org.eclipse.jetty.http.HttpStatus;
 
 import com.google.common.io.Files;
 
-@Path("/images")
+@Path("/service/v1/images")
 @Produces("image/png")
 public class ImagesResource {
 
