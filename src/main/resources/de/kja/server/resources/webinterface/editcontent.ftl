@@ -25,7 +25,7 @@
 		<input type="text" name="district" value="${content.district}"/><br/>
 		Bild:<br/>
 		<#if content.image??>
-			<img src="/images?id=${content.image}" alt="Hochgeladenes Bild"/><br/>
+			<img src="/service/v1/images?id=${content.image}" alt="Hochgeladenes Bild"/><br/>
 		</#if>
 		<input type="file" name="image" accept="image/png"/>
 		<#if content.image??>
