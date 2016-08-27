@@ -20,6 +20,7 @@
 				<tr>
 					<td>${content.title}</td>
 					<td>${content.shortText}</td>
+					<td>${content.district}</td>
 					<td>
 						<form method="get" action="/webinterface/edit">
 							<input type="hidden" name="id" value="${content.id}"/>

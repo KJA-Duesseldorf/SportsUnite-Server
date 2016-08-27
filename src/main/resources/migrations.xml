@@ -34,4 +34,153 @@
         </createTable>
     </changeSet>
     
+    <changeSet id="3" author="turakar">
+        <createTable tableName="districts">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addColumn tableName="contents">
+            <column name="districtid" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    
+    <changeSet id="4" author="turakar">
+        <addColumn tableName="districts">
+            <column name="position" type="geography(point, 4326)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="districts" columnName="position"/>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="5" author="turakar">
+        <comment>Insert Duesseldorf's districts</comment>
+        <insert tableName="districts">
+            <column name="name" value="Stadtbezirk 1"/>
+            <column name="position" valueComputed="ST_GeographyFromText('SRID=4326;POINT(6.776667 51.225)')"/>
+        </insert>
+        <insert tableName="districts">
+            <column name="name" value="Stadtbezirk 2"/>
+            <column name="position" valueComputed="ST_GeographyFromText('SRID=4326;POINT(6.754722 51.226944)')"/>
+        </insert>
+        <insert tableName="districts">
+            <column name="name" value="Stadtbezirk 3"/>
+            <column name="position" valueComputed="ST_GeographyFromText('SRID=4326;POINT(6.786944 51.203333)')"/>
+        </insert>
+        <insert tableName="districts">
+            <column name="name" value="Stadtbezirk 4"/>
+            <column name="position" valueComputed="ST_GeographyFromText('SRID=4326;POINT(6.754722 51.230278)')"/>
+        </insert>
+        <insert tableName="districts">
+            <column name="name" value="Stadtbezirk 5"/>
+            <column name="position" valueComputed="ST_GeographyFromText('SRID=4326;POINT(6.739167 51.3)')"/>
+        </insert>
+        <insert tableName="districts">
+            <column name="name" value="Stadtbezirk 6"/>
+            <column name="position" valueComputed="ST_GeographyFromText('SRID=4326;POINT(6.814167 51.266111)')"/>
+        </insert>
+        <insert tableName="districts">
+            <column name="name" value="Stadtbezirk 7"/>
+            <column name="position" valueComputed="ST_GeographyFromText('SRID=4326;POINT(6.861389 51.236775)')"/>
+        </insert>
+        <insert tableName="districts">
+            <column name="name" value="Stadtbezirk 8"/>
+            <column name="position" valueComputed="ST_GeographyFromText('SRID=4326;POINT(6.8275 51.209194)')"/>
+        </insert>
+        <insert tableName="districts">
+            <column name="name" value="Stadtbezirk 9"/>
+            <column name="position" valueComputed="ST_GeographyFromText('SRID=4326;POINT(6.869167 51.164258)')"/>
+        </insert>
+        <insert tableName="districts">
+            <column name="name" value="Stadtbezirk 10"/>
+            <column name="position" valueComputed="ST_GeographyFromText('SRID=4326;POINT(6.895278 51.149061)')"/>
+        </insert>
+        <rollback>
+            <delete tableName="districts">
+            	<where>
+            	name = 'Stadtbezirk 1' OR
+            	name = 'Stadtbezirk 2' OR
+            	name = 'Stadtbezirk 3' OR
+            	name = 'Stadtbezirk 4' OR
+            	name = 'Stadtbezirk 5' OR
+            	name = 'Stadtbezirk 6' OR
+            	name = 'Stadtbezirk 7' OR
+            	name = 'Stadtbezirk 8' OR
+            	name = 'Stadtbezirk 9' OR
+            	name = 'Stadtbezirk 10'
+            	</where>
+            </delete>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="6" author="turakar">
+        <addColumn tableName="districts">
+            <column name="subdistricts" type="text" defaultValue="">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <update tableName="districts">
+            <column name="subdistricts" value="Altstadt,Carlstadt,Stadtmitte,Pempelfort,Derendorf,Golzheim"/>
+            <where>name = 'Stadtbezirk 1'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Flingern Süd,Flingern Nord, Düsseltal"/>
+            <where>name = 'Stadtbezirk 2'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Friedrichstadt,Unterbilk,Hafen,Hamm,Volmerswerth,Bilk,Oberbilk,Flehe"/>
+            <where>name = 'Stadtbezirk 3'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Oberkassel,Heerdt,Lörick,Niederkassel"/>
+            <where>name = 'Stadtbezirk 4'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Stockum,Lohausen,Kaiserswerth,Wittlaer,Angermund,Kalkum"/>
+            <where>name = 'Stadtbezirk 5'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Lichtenbroich,Unterrath,Rath,Mörsenbroich"/>
+            <where>name = 'Stadtbezirk 6'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Gerresheim,Grafenberg,Ludenberg,Hubbelrath,Knittkuhl"/>
+            <where>name = 'Stadtbezirk 7'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Lierenfeld,Eller,Vennhausen,Unterbach"/>
+            <where>name = 'Stadtbezirk 8'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Wersten,Himmelgeist,Holthausen,Reisholz,Benrath,Urdenbach,Itter,Hassels"/>
+            <where>name = 'Stadtbezirk 9'</where>
+        </update>
+        <update tableName="districts">
+            <column name="subdistricts" value="Garath,Hellerhof"/>
+            <where>name = 'Stadtbezirk 10'</where>
+        </update>
+        <rollback>
+            <dropColumn tableName="districts" columnName="subdistricts"/>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="7" author="turakar">
+        <addColumn tableName="contents">
+            <column name="image" type="text">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="contents" columnName="image"/>
+        </rollback>
+    </changeSet>
+    
 </databaseChangeLog>
