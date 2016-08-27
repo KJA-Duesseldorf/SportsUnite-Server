@@ -3,11 +3,13 @@ package de.kja.server;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.skife.jdbi.v2.DBI;
 
-import de.kja.server.auth.Admin;
+import de.kja.server.auth.User;
+import de.kja.server.auth.AccessLevelAuthorizer;
 import de.kja.server.auth.DatabaseAuthenticator;
 import de.kja.server.dbi.AdminDao;
 import de.kja.server.dbi.ContentDao;
 import de.kja.server.dbi.DistrictDao;
+import de.kja.server.dbi.UserDao;
 import de.kja.server.resources.service.ContentResource;
 import de.kja.server.resources.service.DistrictResource;
 import de.kja.server.resources.service.ImagesResource;
@@ -48,11 +50,13 @@ public class Server extends Application<ServerConfig> {
 		final DBI dbi = factory.build(environment, configuration.getDatabase(), "postgresql");
 		final DistrictDao districtDao = dbi.onDemand(DistrictDao.class);
 		final ContentDao contentDao = dbi.onDemand(ContentDao.class);
+		final UserDao userDao = dbi.onDemand(UserDao.class);
 		
 		environment.jersey().register(new AuthDynamicFeature(
-				new BasicCredentialAuthFilter.Builder<Admin>()
-				.setAuthenticator(new DatabaseAuthenticator(dbi.onDemand(AdminDao.class)))
-				.setRealm("Adminbereich")
+				new BasicCredentialAuthFilter.Builder<User>()
+				.setAuthenticator(new DatabaseAuthenticator(userDao, dbi.onDemand(AdminDao.class)))
+				.setAuthorizer(new AccessLevelAuthorizer())
+				.setRealm("Secured")
 				.buildAuthFilter()));
 		
 		final ImagesResource imagesResource = new ImagesResource();

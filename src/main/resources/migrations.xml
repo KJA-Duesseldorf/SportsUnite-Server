@@ -183,4 +183,18 @@
         </rollback>
     </changeSet>
     
+    <changeSet id="8" author="turakar">
+        <createTable tableName="users">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    
 </databaseChangeLog>
