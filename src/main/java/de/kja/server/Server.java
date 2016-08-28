@@ -13,6 +13,7 @@ import de.kja.server.dbi.UserDao;
 import de.kja.server.resources.service.ContentResource;
 import de.kja.server.resources.service.DistrictResource;
 import de.kja.server.resources.service.ImagesResource;
+import de.kja.server.resources.service.RegisterResource;
 import de.kja.server.resources.webinterface.EditContentResource;
 import de.kja.server.resources.webinterface.IndexResource;
 import io.dropwizard.Application;
@@ -61,7 +62,8 @@ public class Server extends Application<ServerConfig> {
 		
 		final ImagesResource imagesResource = new ImagesResource();
 		environment.jersey().register(imagesResource);
-		
+		final RegisterResource registerResource = new RegisterResource(userDao);
+		environment.jersey().register(registerResource);
 		final DistrictResource districtResource = new DistrictResource(districtDao);
 		environment.jersey().register(districtResource);
 		final ContentResource contentResource = new ContentResource(contentDao, districtDao);
