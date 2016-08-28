@@ -7,6 +7,7 @@ import de.kja.server.auth.User;
 import de.kja.server.auth.AccessLevelAuthorizer;
 import de.kja.server.auth.DatabaseAuthenticator;
 import de.kja.server.dbi.AdminDao;
+import de.kja.server.dbi.CommentDao;
 import de.kja.server.dbi.ContentDao;
 import de.kja.server.dbi.DistrictDao;
 import de.kja.server.dbi.UserDao;
@@ -52,6 +53,7 @@ public class Server extends Application<ServerConfig> {
 		final DistrictDao districtDao = dbi.onDemand(DistrictDao.class);
 		final ContentDao contentDao = dbi.onDemand(ContentDao.class);
 		final UserDao userDao = dbi.onDemand(UserDao.class);
+		final CommentDao commentDao = dbi.onDemand(CommentDao.class);
 		
 		environment.jersey().register(new AuthDynamicFeature(
 				new BasicCredentialAuthFilter.Builder<User>()
@@ -66,7 +68,7 @@ public class Server extends Application<ServerConfig> {
 		environment.jersey().register(registerResource);
 		final DistrictResource districtResource = new DistrictResource(districtDao);
 		environment.jersey().register(districtResource);
-		final ContentResource contentResource = new ContentResource(contentDao, districtDao);
+		final ContentResource contentResource = new ContentResource(contentDao, districtDao, commentDao);
 		environment.jersey().register(contentResource);
 		
 		final IndexResource indexResource = new IndexResource(contentDao);
