@@ -7,7 +7,7 @@ public class Comment {
 	@JsonProperty("id")
 	private long id;
 	
-	@JsonProperty("contentid")
+	@JsonProperty("contentId")
 	private long contentId;
 	
 	@JsonProperty("username")

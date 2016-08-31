@@ -17,11 +17,12 @@ import de.kja.server.models.Comment;
 @RegisterMapper(CommentDao.Mapper.class)
 public interface CommentDao {
 
-	@SqlQuery("select comments.id, comments.contentid, users.name, comments.text, comments.timestamp "
+	@SqlQuery("select comments.id as id, comments.contentid as contentid, users.name as username, "
+			+ "comments.text as text, comments.timestamp as timestamp "
 			+ "from comments "
 			+ "join users on comments.userid = users.id "
 			+ "where comments.contentid = :contentid "
-			+ "order by comments.timestamp desc")
+			+ "order by comments.timestamp asc")
 	public List<Comment> getComments(@Bind("contentid") long contentId);
 	
 	@SqlUpdate("insert into comments (contentid, userid, text) "
@@ -36,8 +37,8 @@ public interface CommentDao {
 
 		@Override
 		public Comment map(int index, ResultSet r, StatementContext ctx) throws SQLException {
-			return new Comment(r.getLong("comments.id"), r.getLong("comments.contentid"), r.getString("users.name"), 
-					r.getString("comments.text"), r.getTimestamp("comments.timestamp").getTime());
+			return new Comment(r.getLong("id"), r.getLong("contentid"), r.getString("username"), 
+					r.getString("text"), r.getTimestamp("timestamp").getTime());
 		}
 		
 	}

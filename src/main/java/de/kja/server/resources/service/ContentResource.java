@@ -3,7 +3,6 @@ package de.kja.server.resources.service;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -64,10 +63,11 @@ public class ContentResource {
 	@Path("{id}")
 	@RolesAllowed("user")
 	public Response postComment(@PathParam("id") long id, @Context SecurityContext securityContext,
-			@FormParam("text") String text) {
+			String text) {
 		if(contentDao.getContent(id) == null) {
 			return Response.status(HttpStatus.NOT_FOUND_404).build();
 		}
+		text = text.substring(1, text.length() - 1); // strip off "" from JSON format
 		int changed = commentDao.addComment(new Comment(id, securityContext.getUserPrincipal().getName(), text));
 		if(changed == 0) {
 			return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
