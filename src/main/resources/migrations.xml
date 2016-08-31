@@ -183,4 +183,38 @@
         </rollback>
     </changeSet>
     
+    <changeSet id="8" author="turakar">
+        <createTable tableName="users">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    
+    <changeSet id="9" author="turakar">
+         <createTable tableName="comments">
+             <column name="id" type="bigint" autoIncrement="true">
+                 <constraints primaryKey="true"/>
+             </column>
+             <column name="contentid" type="bigint">
+                 <constraints nullable="false"/>
+             </column>
+             <column name="userid" type="bigint">
+                 <constraints nullable="false"/>
+             </column>
+             <column name="text" type="text">
+                 <constraints nullable="false"/>
+             </column>
+             <column name="timestamp" type="timestamp with time zone" defaultValue="NOW()">
+                 <constraints nullable="false"/>
+             </column>
+         </createTable>
+    </changeSet>
+    
 </databaseChangeLog>
