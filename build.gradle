@@ -35,7 +35,7 @@ node {
 }
 
 task browserify(type: Exec, dependsOn: npmInstall) {
-    new File("src/main/resources/js").mkdirs()
+    new File("${project.projectDir}/src/main/resources/js").mkdirs()
     workingDir 'js'
     commandLine 'node_modules/.bin/browserify', 'editcontent.js', '-o', '../src/main/resources/js/editcontentbundle.js'
 }
