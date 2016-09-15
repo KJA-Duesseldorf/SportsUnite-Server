@@ -1,4 +1,17 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath "com.moowork.gradle:gradle-node-plugin:0.13"
+    }
+}
+
 apply plugin: 'java'
+apply plugin: 'com.moowork.node'
 
 repositories {
     mavenCentral()
@@ -10,9 +23,21 @@ dependencies {
     compile group: 'io.dropwizard', name: 'dropwizard-migrations', version: '0.9.2'
     compile group: 'io.dropwizard', name: 'dropwizard-views-freemarker', version: '0.9.2'
     compile group: 'io.dropwizard', name: 'dropwizard-auth', version: '0.9.2'
+    compile group: 'io.dropwizard', name: 'dropwizard-assets', version: '0.9.2'
     compile group: 'org.glassfish.jersey.media', name: 'jersey-media-multipart', version: '2.23.1'
     compile group: 'postgresql', name: 'postgresql', version: '9.1-901-1.jdbc4'
     compile group: 'org.apache.tika', name: 'tika-core', version: '1.13'
+}
+
+node {
+    nodeModulesDir = file("${project.projectDir}/js")
+    workDir = file("${project.projectDir}/js")
+}
+
+task browserify(type: Exec, dependsOn: npmInstall) {
+    new File("src/main/resources/js").mkdirs()
+    workingDir 'js'
+    commandLine 'node_modules/.bin/browserify', 'editcontent.js', '-o', '../src/main/resources/js/editcontentbundle.js'
 }
 
 jar {
@@ -29,3 +54,5 @@ jar {
                 'Main-Class': 'de.kja.server.Server'
     }
 }
+
+jar.dependsOn browserify

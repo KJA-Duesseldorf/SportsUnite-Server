@@ -13,3 +13,7 @@ hs_err_pid*
 
 # Images (uploaded at runtime)
 /images/
+
+# Node.js
+node_modules
+src/main/resources/js

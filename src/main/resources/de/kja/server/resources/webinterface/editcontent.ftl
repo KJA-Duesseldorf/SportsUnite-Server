@@ -3,13 +3,18 @@
 <#-- @ftlvariable name="" type="de.kja.server.resources.webinterface.EditContentView -->
 
 <html>
+<style>
+tr {
+    vertical-align:top
+}
+</style>
 <head>
 	<meta charset="utf-8"/>
 	<title>Inhalt bearbeiten</title>
 </head>
 <body>
 	<noscript>
-		<h3>Die Sicherheitsabfrage beim Löschen von Inhalten funktioniert nicht mit deaktiviertem JavaScript!</h3>
+		<h3>Die Sicherheitsabfrage beim Löschen von Inhalten und die Markdown Preview funktionieren nicht mit deaktiviertem JavaScript!</h3>
 	</noscript>
 	<form enctype="multipart/form-data" method="POST" action="/webinterface/edit">
 		<#if content.id != -1>
@@ -33,9 +38,13 @@
 		</#if>
 		<br/>
 		Text:<br/>
-		<textarea cols="30" wrap="hard" rows="30" name="text">${content.text}</textarea><br/>
+		<table><tr>
+		<td><textarea id="text-input" cols="80" rows="30" name="text" oninput="this.editor.update()">${content.text}</textarea></td>
+		<td><div id="preview"></div></td>
+		</tr></table>
 		<button type="submit" name="button" value="save">Speichern</button>
 		<button type="submit" name="button" value="saveexit">Speichern und Schließen</button>
 	</form>
+    <script src="/js/editcontentbundle.js"></script>
 </body>
 </html>

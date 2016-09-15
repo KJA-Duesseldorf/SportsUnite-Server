@@ -18,6 +18,7 @@ import de.kja.server.resources.service.RegisterResource;
 import de.kja.server.resources.webinterface.EditContentResource;
 import de.kja.server.resources.webinterface.IndexResource;
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
 import io.dropwizard.db.PooledDataSourceFactory;
@@ -42,6 +43,7 @@ public class Server extends Application<ServerConfig> {
 			}
 		});
 		bootstrap.addBundle(new ViewBundle<ServerConfig>());
+		bootstrap.addBundle(new AssetsBundle("/js"));
 	}
 
 	@Override
