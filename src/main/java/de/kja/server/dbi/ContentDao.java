@@ -13,58 +13,93 @@ import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
 import de.kja.server.models.Content;
+import de.kja.server.models.ContentTranslation;
 
-@RegisterMapper(ContentDao.Mapper.class)
+@RegisterMapper(ContentDao.ContentMapper.class)
 public interface ContentDao {
 	
-	@SqlQuery("insert into contents (title, shorttext, text, districtid, image) "
-			+ "values (:title, :shortText, :text, (select id from districts where name = :district), :image) "
-			+ "returning id")
-	public int insert(@BindBean Content content);
+	public static final String DEFAULT_LANGUAGE = "de";
 	
-	@SqlQuery("select contents.id, contents.title, contents.shortText, contents.text, districts.name, contents.image "
-			+ "from contents " 
-			+ "inner join districts on contents.districtid = districts.id")
-	public List<Content> getAllContents();
-	
-	@SqlQuery("select contents.id, contents.title, contents.shortText, contents.text, districts.name, contents.image "
+	@SqlQuery("select :language as language, contents.id, districts.name, contents.image, "
+			+ "contenttranslations.title, contenttranslations.shorttext, contenttranslations.text "
 			+ "from contents "
-			+ "inner join districts ON contents.districtid = districts.id "
-			+ "order by ST_Distance(districts.position, (select position from districts where name = :district)) asc;")
-	public List<Content> getAllContentsOrdered(@Bind("district") String district);
+			+ "inner join contenttranslations on contents.id = contenttranslations.contentid "
+			+ "inner join districts on contents.districtid = districts.id "
+			+ "where contenttranslations.language = :language")
+	public List<Content> getAllContents(@Bind("language") String language);
 	
-	@SqlQuery("select contents.id, contents.title, contents.shortText, contents.text, districts.name, contents.image "
+	@SqlQuery("select :language as language, contents.id, districts.name, contents.image, "
+			+ "contenttranslations.title, contenttranslations.shorttext, contenttranslations.text "
+			+ "from contents "
+			+ "inner join contenttranslations on contents.id = contenttranslations.contentid "
+			+ "inner join districts on contents.districtid = districts.id "
+			+ "where contenttranslations.language = :language "
+			+ "order by ST_Distance(districts.position, (select position from districts where name = :district)) asc;")
+	public List<Content> getAllContentsOrdered(@Bind("language") String language, @Bind("district") String district);
+	
+	@SqlQuery("select :language as language, contents.id, districts.name, contents.image, "
+			+ "contenttranslations.title, contenttranslations.shorttext, contenttranslations.text "
+			+ "from contents "
+			+ "inner join contenttranslations on contents.id = contenttranslations.contentid "
+			+ "inner join districts on contents.districtid = districts.id " 
+			+ "where contents.id = :id and contenttranslations.language = :language")
+	public Content getContent(@Bind("id") long id, @Bind("language") String language);
+	
+	@SqlQuery("select contents.id, districts.name, contents.image "
 			+ "from contents "
 			+ "inner join districts on contents.districtid = districts.id " 
 			+ "where contents.id = :id")
-	public Content getContent(@Bind("id") long id);
+	public Content getContentWithoutTranslation(@Bind("id") long id);
 	
-	@SqlUpdate("delete from contents where id = :id")
+	
+	@SqlQuery("select contents.image from contents where id = :id")
+	public String getContentImage(@Bind("id") long id);
+	
+	
+	
+	@SqlQuery("insert into contents (districtid, image) "
+			+ "values ((select id from districts where name = :district), :image) "
+			+ "returning id")
+	public int insertContent(@BindBean Content content);
+	
+	@SqlUpdate("insert into contenttranslations (contentid, language, title, shorttext, text)"
+			+ "values(:contentId, :language, :title, :shortText, :text)")
+	public int insertContentTranslation(@BindBean ContentTranslation translation);
+	
+	@SqlUpdate("delete from contents where id = :id; "
+			+ "delete from contentranslations where contentid = :id;")
 	public int delete(@Bind("id") long id);
 	
 	@SqlUpdate("update contents "
-			+ "set title=:title, shortText=:shortText, text=:text, districtid=(select id from districts "
-			+ "where name = :district) where id = :id")
-	public int update(@BindBean Content content);
+			+ "set districtid=(select id from districts "
+			+ "where name = :district) where id = :id; ")
+	public int updateContentDistrict(@BindBean Content content);
 	
 	@SqlUpdate("update contents "
-			+ "set title=:title, shortText=:shortText, text=:text, districtid=(select id from districts "
-			+ "where name = :district), image=:image where id = :id")
-	public int updateImage(@BindBean Content content);
+			+ "set image=:image where id = :id")
+	public int updateContentImage(@BindBean Content content);
 	
-	@SqlQuery("select contents.image from contents where id = :id")
-	public String getImage(@Bind("id") long id);
+	@SqlUpdate("update contenttranslations "
+			+ "set title=:title, shorttext=:shortText, text=:text "
+			+ "where contentid = :contentId and language = :language")
+	public int updateContentTranslation(@BindBean ContentTranslation content);
 	
-	class Mapper implements ResultSetMapper<Content> {
+	
+	
+	class ContentMapper implements ResultSetMapper<Content> {
 		
-		public Mapper() {
+		public ContentMapper() {
 			
 		}
 
 		@Override
 		public Content map(int index, ResultSet r, StatementContext ctx) throws SQLException {
-			return new Content(r.getLong("id"), r.getString("title"), r.getString("shorttext"),
-					r.getString("text"), r.getString("name"), r.getString("image"));
+			ContentTranslation contentTranslation = null;
+			if(r.getMetaData().getColumnCount() > 3) {
+				contentTranslation = new ContentTranslation(r.getString("language"), 
+						r.getString("title"), r.getString("shorttext"), r.getString("text"));
+			}
+			return new Content(r.getLong("id"), r.getString("name"), r.getString("image"), contentTranslation);
 		}
 		
 	}

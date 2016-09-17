@@ -39,20 +39,20 @@ public class ContentResource {
 	}
 	
 	@GET
-	public List<Content> getContent(@QueryParam("district") Optional<String> district) {
+	public List<Content> getContent(@QueryParam("district") Optional<String> district, @QueryParam("language") Optional<String> language) {
 		List<Content> contents = null;
 		if(district.isPresent() && !district.get().isEmpty() && districtDao.isValid(district.get()) != 0) {
-			contents = contentDao.getAllContentsOrdered(district.get());
+			contents = contentDao.getAllContentsOrdered(language.or(ContentDao.DEFAULT_LANGUAGE), district.get());
 		} else {
-			contents = contentDao.getAllContents();
+			contents = contentDao.getAllContents(language.or(ContentDao.DEFAULT_LANGUAGE));
 		}
 		return contents;
 	}
 	
 	@GET
 	@Path("{id}")
-	public Response getComments(@PathParam("id") long id) {
-		if(contentDao.getContent(id) == null) {
+	public Response getComments(@PathParam("id") long id, @QueryParam("language") Optional<String> language) {
+		if(contentDao.getContent(id, language.or(ContentDao.DEFAULT_LANGUAGE)) == null) {
 			return Response.status(HttpStatus.NOT_FOUND_404).build();
 		}
 		List<Comment> comments = commentDao.getComments(id);
@@ -64,7 +64,7 @@ public class ContentResource {
 	@RolesAllowed("user")
 	public Response postComment(@PathParam("id") long id, @Context SecurityContext securityContext,
 			String text) {
-		if(contentDao.getContent(id) == null) {
+		if(contentDao.getContent(id, ContentDao.DEFAULT_LANGUAGE) == null) {
 			return Response.status(HttpStatus.NOT_FOUND_404).build();
 		}
 		text = text.substring(1, text.length() - 1); // strip off "" from JSON format

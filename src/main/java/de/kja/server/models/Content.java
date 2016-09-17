@@ -2,6 +2,7 @@ package de.kja.server.models;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Content {
@@ -9,40 +10,29 @@ public class Content {
 	private long id;
 	
 	@NotNull
-	private String title;
-	
-	@NotNull
-	private String shortText;
-	
-	@NotNull
-	private String text;
-	
-	@NotNull
 	private String district;
 	
 	private String image;
+
+	@JsonIgnore
+	private ContentTranslation translation;
 	
 	public Content() {
 		
 	}
 
-	public Content(String title, String shortText, String text, String district, String image) {
+	public Content(String district, String image, ContentTranslation translation) {
 		this.id = -1;
-		this.title = title;
-		this.shortText = shortText;
-		this.text = text;
 		this.district = district;
 		this.image = image;
+		this.translation = translation;
 	}
 
-	public Content(long id, String title, String shortText, String text, String district, String image) {
-		super();
+	public Content(long id, String district, String image, ContentTranslation translation) {
 		this.id = id;
-		this.title = title;
-		this.shortText = shortText;
-		this.text = text;
 		this.district = district;
 		this.image = image;
+		this.translation = translation;
 	}
 
 	@JsonProperty("id")
@@ -57,32 +47,29 @@ public class Content {
 
 	@JsonProperty("title")
 	public String getTitle() {
-		return title;
-	}
-
-	@JsonProperty("title")
-	public void setTitle(String title) {
-		this.title = title;
+		if(translation != null) {
+			return translation.getTitle();
+		} else {
+			return null;
+		}
 	}
 
 	@JsonProperty("shortText")
 	public String getShortText() {
-		return shortText;
-	}
-
-	@JsonProperty("shortText")
-	public void setShortText(String shortText) {
-		this.shortText = shortText;
+		if(translation != null) {
+			return translation.getShortText();
+		} else {
+			return null;
+		}
 	}
 
 	@JsonProperty("text")
 	public String getText() {
-		return text;
-	}
-
-	@JsonProperty("text")
-	public void setText(String text) {
-		this.text = text;
+		if(translation != null) {
+			return translation.getText();
+		} else {
+			return null;
+		}
 	}
 
 	@JsonProperty("district")
@@ -90,7 +77,6 @@ public class Content {
 		return district;
 	}
 
-	@JsonProperty("district")
 	public void setDistrict(String district) {
 		this.district = district;
 	}
@@ -100,9 +86,13 @@ public class Content {
 		return image;
 	}
 
-	@JsonProperty("image")
 	public void setImage(String image) {
 		this.image = image;
+	}
+	
+	@JsonIgnore
+	public ContentTranslation getTranslation() {
+		return translation;
 	}
 
 }

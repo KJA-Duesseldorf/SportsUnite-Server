@@ -217,4 +217,44 @@
          </createTable>
     </changeSet>
     
+    <changeSet id="10" author="turakar">
+        <createTable tableName="contenttranslations">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="contentid" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="language" type="varchar(2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="shorttext" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <dropColumn tableName="contents" columnName="title"/>
+        <dropColumn tableName="contents" columnName="shorttext"/>
+        <dropColumn tableName="contents" columnName="text"/>
+        <rollback>
+            <addColumn tableName="contents">
+                <column name="title" type="text">
+                    <constraints nullable="false"/>
+                </column>
+                <column name="shorttext" type="text">
+                    <constraints nullable="false"/>
+                </column>
+                <column name="text" type="text">
+                    <constraints nullable="false"/>
+                </column>
+            </addColumn>
+            <dropTable tableName="contenttranslations"/>
+        </rollback>
+    </changeSet>
+    
 </databaseChangeLog>

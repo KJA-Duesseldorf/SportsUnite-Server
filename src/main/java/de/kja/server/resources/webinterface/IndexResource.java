@@ -28,7 +28,7 @@ public class IndexResource {
 	@GET
 	@PermitAll
 	public IndexView get() {
-		List<Content> contents = contentDao.getAllContents();
+		List<Content> contents = contentDao.getAllContents(ContentDao.DEFAULT_LANGUAGE);
 		return new IndexView(contents, null);
 	}
 	

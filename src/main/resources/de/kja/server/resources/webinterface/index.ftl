@@ -1,3 +1,4 @@
+<#ftl encoding="utf-8">
 <!DOCTYPE html>
 
 <#-- @ftlvariable name="" type="de.kja.server.resources.webinterface.IndexView -->

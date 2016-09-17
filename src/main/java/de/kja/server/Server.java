@@ -3,9 +3,9 @@ package de.kja.server;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.skife.jdbi.v2.DBI;
 
-import de.kja.server.auth.User;
 import de.kja.server.auth.AccessLevelAuthorizer;
 import de.kja.server.auth.DatabaseAuthenticator;
+import de.kja.server.auth.User;
 import de.kja.server.dbi.AdminDao;
 import de.kja.server.dbi.CommentDao;
 import de.kja.server.dbi.ContentDao;
