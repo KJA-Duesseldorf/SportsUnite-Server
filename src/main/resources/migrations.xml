@@ -257,4 +257,15 @@
         </rollback>
     </changeSet>
     
+    <changeSet id="11" author="turakar">
+        <addColumn tableName="contents">
+            <column name="public" type="boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="contents" columnName="public"/>
+        </rollback>
+    </changeSet>
+    
 </databaseChangeLog>

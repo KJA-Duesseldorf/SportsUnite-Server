@@ -17,22 +17,27 @@ public class Content {
 	@JsonIgnore
 	private ContentTranslation translation;
 	
+	@JsonIgnore
+	private boolean isPublic;
+	
 	public Content() {
 		
 	}
 
-	public Content(String district, String image, ContentTranslation translation) {
+	public Content(String district, String image, ContentTranslation translation, boolean isPublic) {
 		this.id = -1;
 		this.district = district;
 		this.image = image;
 		this.translation = translation;
+		this.isPublic = isPublic;
 	}
 
-	public Content(long id, String district, String image, ContentTranslation translation) {
+	public Content(long id, String district, String image, ContentTranslation translation, boolean isPublic) {
 		this.id = id;
 		this.district = district;
 		this.image = image;
 		this.translation = translation;
+		this.isPublic = isPublic;
 	}
 
 	@JsonProperty("id")
@@ -93,6 +98,16 @@ public class Content {
 	@JsonIgnore
 	public ContentTranslation getTranslation() {
 		return translation;
+	}
+
+	@JsonIgnore
+	public boolean isPublic() {
+		return isPublic;
+	}
+
+	@JsonIgnore
+	public void setPublic(boolean isPublic) {
+		this.isPublic = isPublic;
 	}
 
 }

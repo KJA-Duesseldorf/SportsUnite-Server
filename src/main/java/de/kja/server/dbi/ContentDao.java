@@ -20,24 +20,27 @@ public interface ContentDao {
 	
 	public static final String DEFAULT_LANGUAGE = "de";
 	
-	@SqlQuery("select :language as language, contents.id, districts.name, contents.image, "
-			+ "contenttranslations.title, contenttranslations.shorttext, contenttranslations.text "
-			+ "from contents "
-			+ "inner join contenttranslations on contents.id = contenttranslations.contentid "
-			+ "inner join districts on contents.districtid = districts.id "
-			+ "where contenttranslations.language = :language")
-	public List<Content> getAllContents(@Bind("language") String language);
-	
-	@SqlQuery("select :language as language, contents.id, districts.name, contents.image, "
+	@SqlQuery("select :language as language, contents.id, districts.name, contents.image, contents.public, "
 			+ "contenttranslations.title, contenttranslations.shorttext, contenttranslations.text "
 			+ "from contents "
 			+ "inner join contenttranslations on contents.id = contenttranslations.contentid "
 			+ "inner join districts on contents.districtid = districts.id "
 			+ "where contenttranslations.language = :language "
-			+ "order by ST_Distance(districts.position, (select position from districts where name = :district)) asc;")
-	public List<Content> getAllContentsOrdered(@Bind("language") String language, @Bind("district") String district);
+			+ "and (contents.public or :showPrivate)")
+	public List<Content> getAllContents(@Bind("language") String language, @Bind("showPrivate") boolean showPrivate);
 	
-	@SqlQuery("select :language as language, contents.id, districts.name, contents.image, "
+	@SqlQuery("select :language as language, contents.id, districts.name, contents.image, contents.public, "
+			+ "contenttranslations.title, contenttranslations.shorttext, contenttranslations.text "
+			+ "from contents "
+			+ "inner join contenttranslations on contents.id = contenttranslations.contentid "
+			+ "inner join districts on contents.districtid = districts.id "
+			+ "where contenttranslations.language = :language "
+			+ "and (contents.public or :showPrivate) "
+			+ "order by ST_Distance(districts.position, (select position from districts where name = :district)) asc;")
+	public List<Content> getAllContentsOrdered(@Bind("language") String language, @Bind("district") String district, 
+			@Bind("showPrivate") boolean showPrivate);
+	
+	@SqlQuery("select :language as language, contents.id, districts.name, contents.image, contents.public, "
 			+ "contenttranslations.title, contenttranslations.shorttext, contenttranslations.text "
 			+ "from contents "
 			+ "inner join contenttranslations on contents.id = contenttranslations.contentid "
@@ -45,7 +48,7 @@ public interface ContentDao {
 			+ "where contents.id = :id and contenttranslations.language = :language")
 	public Content getContent(@Bind("id") long id, @Bind("language") String language);
 	
-	@SqlQuery("select contents.id, districts.name, contents.image "
+	@SqlQuery("select contents.id, districts.name, contents.image, contents.public "
 			+ "from contents "
 			+ "inner join districts on contents.districtid = districts.id " 
 			+ "where contents.id = :id")
@@ -84,7 +87,10 @@ public interface ContentDao {
 			+ "where contentid = :contentId and language = :language")
 	public int updateContentTranslation(@BindBean ContentTranslation content);
 	
-	
+	@SqlUpdate("update contents "
+			+ "set public = :public "
+			+ "where id = :id")
+	public int updateContentPublic(@BindBean Content content);
 	
 	class ContentMapper implements ResultSetMapper<Content> {
 		
@@ -95,11 +101,11 @@ public interface ContentDao {
 		@Override
 		public Content map(int index, ResultSet r, StatementContext ctx) throws SQLException {
 			ContentTranslation contentTranslation = null;
-			if(r.getMetaData().getColumnCount() > 3) {
+			if(r.getMetaData().getColumnCount() > 4) {
 				contentTranslation = new ContentTranslation(r.getString("language"), 
 						r.getString("title"), r.getString("shorttext"), r.getString("text"));
 			}
-			return new Content(r.getLong("id"), r.getString("name"), r.getString("image"), contentTranslation);
+			return new Content(r.getLong("id"), r.getString("name"), r.getString("image"), contentTranslation, r.getBoolean("public"));
 		}
 		
 	}

@@ -23,6 +23,13 @@
 					<td>${content.shortText}</td>
 					<td>${content.district}</td>
 					<td>
+						<#if content.public>
+							Öffentlich
+						<#else>
+							Privat
+						</#if>
+					</td>
+					<td>
 						<form method="get" action="/webinterface/edit">
 							<input type="hidden" name="id" value="${content.id}"/>
 							<button type="submit">Bearbeiten</button>

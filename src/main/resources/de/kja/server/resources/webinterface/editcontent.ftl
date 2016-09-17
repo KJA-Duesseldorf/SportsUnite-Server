@@ -10,7 +10,7 @@
 </head>
 <body>
 	<noscript>
-		<h3>Die Sicherheitsabfrage beim Löschen von Inhalten und die Markdown Preview funktionieren nicht mit deaktiviertem JavaScript!</h3>
+		<h3>Die Sicherheitsabfrage beim Löschen von Inhalten funktioniert nicht mit deaktiviertem JavaScript!</h3>
 	</noscript>
 	<form enctype="multipart/form-data" method="POST" action="/webinterface/edit">
 	
@@ -35,6 +35,11 @@
 		
 		<button type="submit" name="button" value="save">Speichern</button>
 		<button type="submit" name="button" value="saveexit">Speichern und Schließen</button>
+		<#if content.public>
+			<button type="submit" name="button" value="makeprivate">Nicht mehr anzeigen</button>
+		<#else>
+			<button type="submit" name="button" value="makepublic">Veröffentlichen</button>
+		</#if>
 	</form>
 	<#list translations>
 		<table border=1>

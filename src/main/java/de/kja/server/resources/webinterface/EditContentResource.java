@@ -63,7 +63,7 @@ public class EditContentResource {
 		if(idString == null) {
 			return Response.status(400).build();
 		} else if(idString.equals("new")) {
-			content = new Content("", null, null);
+			content = new Content("", null, null, false);
 			for(TranslationStatus translation : status) {
 				translation.setFinished(false);
 			}
@@ -106,13 +106,13 @@ public class EditContentResource {
 		}
 		
 		if(idString.equals("new")) {
-			content = new Content(district, image, null);
+			content = new Content(district, image, null, false);
 			int id = contentDao.insertContent(content);
 			content.setId(id);
 		} else {
 			try {
 				long id = Long.valueOf(idString);
-				content = new Content(id, district, image, null);
+				content = new Content(id, district, image, null, false);
 				int affected;
 				if(button.equals("deleteimage")) {
 					String savedImage = contentDao.getContentImage(content.getId());
@@ -123,6 +123,14 @@ public class EditContentResource {
 					content.setImage(null);
 					affected = contentDao.updateContentImage(content);
 					return Response.seeOther(UriBuilder.fromUri("/webinterface/edit?id={arg1}").build(idString)).build();
+				} else if(button.equals("makepublic")) {
+					content.setPublic(true);
+					affected = contentDao.updateContentPublic(content);
+					return Response.seeOther(UriBuilder.fromUri("/webinterface").build()).build();
+				} else if(button.equals("makeprivate")) {
+					content.setPublic(false);
+					affected = contentDao.updateContentPublic(content);
+					return Response.seeOther(UriBuilder.fromUri("/webinterface/edit?id={arg1}").build(content.getId())).build();
 				} else {
 					affected = contentDao.updateContentDistrict(content);
 					if(image != null && !image.isEmpty()) {
@@ -152,7 +160,7 @@ public class EditContentResource {
 		}
 		Content content = contentDao.getContent(id, language);
 		if(content == null) {
-			content = new Content(id, "", null, new ContentTranslation(id, language, "", "", ""));
+			content = new Content(id, "", null, new ContentTranslation(id, language, "", "", ""), false);
 		}
 		return Response.ok(new EditContentTranslationView(content)).build();
 	}
@@ -176,7 +184,7 @@ public class EditContentResource {
 		} else if(button.equals("saveexit")) {
 			return Response.seeOther(UriBuilder.fromUri("/webinterface").build()).build();
 		}
-		return Response.ok(new EditContentTranslationView(new Content(contentId, "", null, translation))).build();
+		return Response.ok(new EditContentTranslationView(new Content(contentId, "", null, translation, false))).build();
 		
 	}
 	

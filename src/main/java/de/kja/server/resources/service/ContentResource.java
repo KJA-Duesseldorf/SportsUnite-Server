@@ -42,9 +42,9 @@ public class ContentResource {
 	public List<Content> getContent(@QueryParam("district") Optional<String> district, @QueryParam("language") Optional<String> language) {
 		List<Content> contents = null;
 		if(district.isPresent() && !district.get().isEmpty() && districtDao.isValid(district.get()) != 0) {
-			contents = contentDao.getAllContentsOrdered(language.or(ContentDao.DEFAULT_LANGUAGE), district.get());
+			contents = contentDao.getAllContentsOrdered(language.or(ContentDao.DEFAULT_LANGUAGE), district.get(), false);
 		} else {
-			contents = contentDao.getAllContents(language.or(ContentDao.DEFAULT_LANGUAGE));
+			contents = contentDao.getAllContents(language.or(ContentDao.DEFAULT_LANGUAGE), false);
 		}
 		return contents;
 	}
