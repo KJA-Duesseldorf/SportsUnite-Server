@@ -19,8 +19,8 @@
 		<table border=1>
 			<#items as content>
 				<tr>
-					<td>${content.title}</td>
-					<td>${content.shortText}</td>
+					<td>${(content.title)!"Kein Titel"}</td>
+					<td>${(content.shortText)!"Kein Kurztext"}</td>
 					<td>${content.district}</td>
 					<td>
 						<#if content.public>

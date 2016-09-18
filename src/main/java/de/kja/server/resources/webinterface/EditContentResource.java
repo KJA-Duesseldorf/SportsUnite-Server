@@ -124,6 +124,9 @@ public class EditContentResource {
 					affected = contentDao.updateContentImage(content);
 					return Response.seeOther(UriBuilder.fromUri("/webinterface/edit?id={arg1}").build(idString)).build();
 				} else if(button.equals("makepublic")) {
+					if(!isComplete(id)) {
+						return Response.status(HttpStatus.BAD_REQUEST_400).build();
+					}
 					content.setPublic(true);
 					affected = contentDao.updateContentPublic(content);
 					return Response.seeOther(UriBuilder.fromUri("/webinterface").build()).build();
@@ -152,6 +155,17 @@ public class EditContentResource {
 		return Response.seeOther(UriBuilder.fromUri("/webinterface/edit?id={arg1}").build(content.getId())).build();
 	}
 	
+	private boolean isComplete(long id) {
+		TranslationStatus[] status = createDefaultTranslationStatus();
+		fillTranslationStatus(status, id);
+		for(TranslationStatus translation : status) {
+			if(!translation.isFinished()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	@GET
 	@Path("text")
 	public Response getContentTranslation(@QueryParam("language") String language, @QueryParam("id") long id) {
