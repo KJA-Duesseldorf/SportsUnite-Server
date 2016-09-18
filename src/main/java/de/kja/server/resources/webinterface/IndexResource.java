@@ -1,5 +1,6 @@
 package de.kja.server.resources.webinterface;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
@@ -28,7 +29,14 @@ public class IndexResource {
 	@GET
 	@PermitAll
 	public IndexView get() {
-		List<Content> contents = contentDao.getAllContents(ContentDao.DEFAULT_LANGUAGE, true);
+		List<Content> contents = contentDao.getReallyAllContents();
+		for(Iterator<Content> it = contents.iterator(); it.hasNext();) {
+			Content content = it.next();
+			if(!(content.getTranslation().getLanguage() == null ||
+					content.getTranslation().getLanguage().equals(ContentDao.DEFAULT_LANGUAGE))) {
+				it.remove();
+			}
+		}
 		return new IndexView(contents, null);
 	}
 	

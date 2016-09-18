@@ -40,6 +40,13 @@ public interface ContentDao {
 	public List<Content> getAllContentsOrdered(@Bind("language") String language, @Bind("district") String district, 
 			@Bind("showPrivate") boolean showPrivate);
 	
+	@SqlQuery("select contenttranslations.language as language, contents.id, districts.name, contents.image, contents.public, "
+			+ "contenttranslations.title, contenttranslations.shorttext, contenttranslations.text "
+			+ "from contents "
+			+ "left outer join contenttranslations on contents.id = contenttranslations.contentid "
+			+ "inner join districts on contents.districtid = districts.id")
+	public List<Content> getReallyAllContents();
+	
 	@SqlQuery("select :language as language, contents.id, districts.name, contents.image, contents.public, "
 			+ "contenttranslations.title, contenttranslations.shorttext, contenttranslations.text "
 			+ "from contents "
