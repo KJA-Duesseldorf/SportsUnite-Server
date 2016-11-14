@@ -77,7 +77,7 @@ public interface ContentDao {
 	public int insertContentTranslation(@BindBean ContentTranslation translation);
 	
 	@SqlUpdate("delete from contents where id = :id; "
-			+ "delete from contentranslations where contentid = :id;")
+			+ "delete from contenttranslations where contentid = :id;")
 	public int delete(@Bind("id") long id);
 	
 	@SqlUpdate("update contents "
