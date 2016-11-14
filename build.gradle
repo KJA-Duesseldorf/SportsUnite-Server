@@ -51,7 +51,7 @@ jar {
         attributes 'Implementation-Title': 'Hello-World',
                 'Built-Date': new Date(),
                 'Built-JDK': System.getProperty('java.version'),
-                'Main-Class': 'de.kja.server.Server'
+                'Main-Class': 'de.kjaduesseldorf.sportsunite.server.Server'
     }
 }
 
